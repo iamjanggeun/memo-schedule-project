@@ -34,6 +34,7 @@
     "isConfirmed": false
   }
 }
+```
 
 #### Error Cases
 | Status | Error Code | Description |
