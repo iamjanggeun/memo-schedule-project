@@ -46,7 +46,7 @@
 
 ---
 
-## Design Notes (설계 의도)
+## Design Notes
 
 이 프로젝트의 API는 다음과 같은 의도로 설계되었습니다.
 
