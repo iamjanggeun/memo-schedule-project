@@ -58,3 +58,33 @@
    - `extractedSchedule`을 별도 객체로 분리하여, 향후 일정 정보에 필드(참석자, 알림 설정 등)가 추가되더라도 메모 정보와 독립적으로 확장할 수 있게 설계했습니다.
 4. **isConfirmed 필드 (데이터 신뢰도 관리)**
    - AI의 분석 결과는 100% 완벽하지 않을 수 있습니다. 사용자가 최종적으로 "확인/저장" 버튼을 누르기 전까지는 `false` 상태로 유지하여, 시스템 데이터의 신뢰도를 보장합니다.
+
+
+### 1.2 메모 삭제
+특정 메모를 삭제합니다. 파라미터에 따라 AI가 추출했던 일정 데이터를 함께 지울지 선택할 수 있습니다.
+
+- **Method**: `DELETE`
+- **URL**: `/api/v1/memos/{memoId}`
+- **Description**: 메모 삭제 (일정 보존 옵션 포함)
+
+#### Request Parameters
+| Type | Field | DataType | Required | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| Path | **memoId** | Long | Yes | 삭제 대상 메모 ID |
+| Query | **preserveSchedule** | Boolean | No | 일정 보존 여부 (default: false) |
+
+#### Response
+- **Status**: `204 No Content`
+
+#### Error Cases
+| Status | Error Code | Description |
+| :--- | :--- | :--- |
+| 404 | MEMO_NOT_FOUND | 해당 ID의 메모가 존재하지 않음 |
+
+---
+
+## Design Notes (추가 내용)
+5. **DELETE & 204 No Content**
+   - 삭제 작업이 성공적으로 수행되면 클라이언트에 돌려줄 데이터가 없으므로, HTTP 표준에 따라 `204 No Content`를 반환하여 효율성을 높입니다.
+6. **Soft vs Hard Delete (선택적 삭제)**
+   - 메모를 지운다고 해서 사용자가 공들여 확인한 일정까지 지워지는 것은 위험할 수 있습니다. `preserveSchedule` 파라미터를 통해 데이터 간의 의존성을 사용자가 제어하게 설계했습니다.
